@@ -80,7 +80,7 @@ def separate_audio(temp_folder, title, folder):
     """split a music track into specified sub-tracks by calling ffmpeg from the shell"""
 
     # read each line of the track list and split into start, end, name
-    with open(f'{temp_folder}\\track_list.txt', "r", encoding='utf8') as track_list_file
+    with open(f'{temp_folder}\\track_list.txt', "r", encoding='utf8') as track_list_file:
         original_file = f'{temp_folder}\\{title}.mp3'
         for line in track_list_file:
             # skip comment and empty lines
