@@ -2,7 +2,6 @@ import os
 import subprocess
 import sys
 
-# pip install requests beautifulsoup4 selenium webdriver-manager
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -12,6 +11,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 url = sys.argv[1]
 output_folder = sys.argv[2]
+
+# check command line for original file and track list file
+if len(sys.argv) != 3:
+    print("usage: python akniga_sep.py <book_url> <output_folder>")
+    exit(1)
 
 
 def get_audio_link(url):
@@ -75,14 +79,8 @@ def generate_track_list(soup, folder):
 def separate_audio(temp_folder, title, folder):
     """split a music track into specified sub-tracks by calling ffmpeg from the shell"""
 
-    # check command line for original file and track list file
-    if len(sys.argv) != 3:
-        print("usage: python akniga_sep.py <book_url> <output_folder>")
-        exit(1)
-
     # read each line of the track list and split into start, end, name
-    with open(f'{temp_folder}\\track_list.txt', "r", encoding='utf8') as track_list_file, open('commands.txt', 'w',
-                                                                                               encoding='utf8') as com_file:
+    with open(f'{temp_folder}\\track_list.txt', "r", encoding='utf8') as track_list_file
         original_file = f'{temp_folder}\\{title}.mp3'
         for line in track_list_file:
             # skip comment and empty lines
