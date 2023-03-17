@@ -1,4 +1,3 @@
-import os
 import subprocess
 import sys
 
@@ -8,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from pathlib import Path
 
 url = sys.argv[1]
 output_folder = sys.argv[2]
@@ -30,7 +30,7 @@ def get_audio_link(url):
 
 
 def download_audio_file(url, title, folder):
-    book_original_title = f'{folder}\\{title}.mp3'
+    book_original_title = Path(folder).joinpath(title +'.mp3')
 
     print(f'Downloading {book_original_title}\nTo: {folder}\nPlease wait...')
     # download full book .mp3 file
@@ -70,7 +70,7 @@ def generate_track_list(soup, folder):
                          audio_cursor + int(min) * 60 + int(sec),
                          chapters[-1].contents[3].text))
 
-    track_file = f'{folder}\\track_list.txt'
+    track_file = Path(folder).joinpath('track_list.txt')
     with open(track_file, 'w', encoding='utf8') as file:
         for line in audio_markup:
             print(*line, sep=',', file=file)
@@ -80,8 +80,8 @@ def separate_audio(temp_folder, title, folder):
     """split a music track into specified sub-tracks by calling ffmpeg from the shell"""
 
     # read each line of the track list and split into start, end, name
-    with open(f'{temp_folder}\\track_list.txt', "r", encoding='utf8') as track_list_file:
-        original_file = f'{temp_folder}\\{title}.mp3'
+    with open(Path(temp_folder).joinpath('track_list.txt'), "r", encoding='utf8') as track_list_file:
+        original_file = Path(temp_folder).joinpath(title + '.mp3')
         for line in track_list_file:
             # skip comment and empty lines
             if line.startswith("#") or len(line) <= 1:
@@ -89,7 +89,7 @@ def separate_audio(temp_folder, title, folder):
 
             # create command string for a given track
             start, end, name = line.strip().split(',')
-            out_name = folder + '\\' + name + '.mp3'
+            out_name = Path(folder).joinpath(name + '.mp3')
             command = f'ffmpeg -i "{original_file}" -acodec copy -ss {start} -to {end} "{out_name}"'
 
             # use subprocess to execute the command in the shell
@@ -109,10 +109,10 @@ if __name__ == '__main__':
     response = session.get(url=url, headers=header)
     soup = BeautifulSoup(response.content, 'html.parser')
 
-    working_folder = output_folder + '\\' + get_book_title(soup)
-    temp_folder = working_folder + '\\' + 'original'
-    os.mkdir(working_folder)
-    os.mkdir(temp_folder)
+    working_folder = Path(output_folder).joinpath(get_book_title(soup))
+    temp_folder = working_folder.joinpath('original')
+    working_folder.mkdir(exist_ok=True)
+    temp_folder.mkdir(exist_ok=True)
     download_audio_file(url=url, title=get_book_title(soup), folder=temp_folder)
     generate_track_list(soup=soup, folder=temp_folder)
     separate_audio(temp_folder=temp_folder, title=get_book_title(soup), folder=working_folder)
