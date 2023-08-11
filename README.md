@@ -1,16 +1,9 @@
-# Akniga.org book separator
-Akniga.org book separator is a simple python script for splitting akniga.org huge audio file (a whole book) into many audio files (by chapters).
-# Requirements:
-### Python libs:
-1. requests
-1. beautifulsoup4 
-1. selenium
-1. webdriver-manager
-1. pathlib
+# Akniga.org book downloader
+Akniga.org book downloader is a simple python script for downloading books from akniga.org.
 
-You can install python libs with simple command for terminal:
+You can install all essential packages with simple command in terminal:
 ```
-pip install requests beautifulsoup4 selenium webdriver-manager pathlib
+pip install -r requirements.txt
 ```
 
 ffmpeg is also required
@@ -21,7 +14,7 @@ ffmpeg is also required
 command for terminal:
 
 ```
-python akniga_sep.py <book_url> <output_folder>
+python akniga_dl.py <book_url> <output_folder>
 ```
 Where:
 - <book_url> is a url to book you want to download
