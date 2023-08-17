@@ -11,11 +11,19 @@ ffmpeg is also required
 * Make sure you've added ffmpeg.exe path to PATH environment variable as on the video
 
 # Usage:
-command for terminal:
+usage: akniga_dl.py [-h] [-d | -f] url output
 
-```
-python akniga_dl.py <book_url> <output_folder>
-```
+Download a book from akniga.org
+
+positional arguments:
+  url           Book's url for downloading
+  output        Absolute or relative path where book will be downloaded
+
+options:
+  -h, --help    show this help message and exit
+  -d, --delete  Delete full book folder, after chapter separation is done
+  -f, --full    Do not separate the book into multiple chapters, if any
+
 Where:
-- <book_url> is a url to book you want to download
-- <output_folder> is an absolute path to download folder
+- url is a url to book you want to download
+- output is an absolute (or relative to the akniga_dl.py file) path to download folder
