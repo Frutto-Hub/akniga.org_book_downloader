@@ -44,8 +44,8 @@ class AKnigaParser:
         self.book_requests = self.get_book_requests()
         book_json, m3u8_url = self.analyse_book_requests()
         book_json['m3u8_url'] = m3u8_url
-        book_json['title'] = sanitize_filename(book_json.title)
-        book_json['chapters'] = json.loads(book_json.items)
+        book_json['title'] = sanitize_filename(book_json['title'])
+        book_json['chapters'] = json.loads(book_json['items'])
         self.book_json = BookData(book_json)
         self.create_book_folder(output_folder)
 
