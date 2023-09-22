@@ -15,7 +15,5 @@ def parse_from_console():
     AKnigaParser(args.url, args.output).run(args.d, not args.f)
 
 
-# if __name__ == "__main__":
-#    parse_from_console()
-
-AKnigaParser("https://akniga.org/magonote-rifudzin-tekuschee-polozhenie-1", "./").run(False, True)
+if __name__ == "__main__":
+    parse_from_console()
