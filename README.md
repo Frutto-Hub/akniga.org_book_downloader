@@ -11,7 +11,9 @@ ffmpeg is also required
 * Make sure you've added ffmpeg.exe path to PATH environment variable as on the video
 
 # Usage:
-usage: akniga_dl.py [-h] [-d | -f] url output
+usage: akniga_dl.py [-h] [-f] url output
+if you know what to do, you can do easier:
+watch commented lines in main.py
 
 Download a book from akniga.org
 
@@ -21,7 +23,6 @@ positional arguments:
 
 options:
   -h, --help    show this help message and exit
-  -d, --delete  Delete full book folder, after chapter separation is done
   -f, --full    Do not separate the book into multiple chapters, if any
 
 Where:
