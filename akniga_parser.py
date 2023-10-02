@@ -1,6 +1,5 @@
 import subprocess
 import brotli
-import requests
 from selenium.webdriver.chrome.service import Service as ChromeService
 from seleniumwire import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -54,7 +53,7 @@ class AKnigaParser:
         print("Getting book requests. Please wait...")
         service = ChromeService(executable_path=ChromeDriverManager().install())
         options = webdriver.ChromeOptions()
-        # options.add_argument('headless')
+        options.add_argument('headless')
         with webdriver.Chrome(service=service, options=options) as driver:
             driver.get(self.book_url)
             return driver.requests
@@ -99,11 +98,10 @@ class AKnigaParser:
         else:
             filepath = self.book_folder / self.book_data.title
 
-        requests.get(self.book_data.m3u8_url)
         ffmpeg_command = ['ffmpeg', '-i', self.book_data.m3u8_url, f'{filepath}.mp3']
         subprocess.run(ffmpeg_command)
 
-    def run(self, delete_full_book_folder: bool = False, separate_into_chapters: bool = True):
+    def run(self, separate_into_chapters: bool = True):
         if len(self.book_data.chapters) < 1:
             return
         if len(self.book_data.chapters) == 1 or not separate_into_chapters:
@@ -121,10 +119,7 @@ class AKnigaParser:
         Path(full_book_folder).mkdir(exist_ok=True)
 
         print(
-            f"Downloading full book with chapters separation, {'deleting' if delete_full_book_folder else 'keeping'} full book folder afterwards")
+            f"Downloading full book with chapters separation, keeping full book afterwards")
 
         self.download_book(single_chapter=False)
         self.separate_into_chapters(full_book_folder / self.book_data.title)
-
-        if delete_full_book_folder:
-            shutil.rmtree(full_book_folder, ignore_errors=True)
